@@ -56,7 +56,26 @@ The architecture in this case is *mips_24kc*, replace it with every occurrence o
 
 ## Network Configuration
 
-Add at least one physical interface to the hotspot network and make sure the is only assigned to hotspot network.
+We suggest to use the following network configuration:
+
+1. WAN 
+
+WAN must be connected to the router in DHCP or with a static IP address.Using a static IP address could be easier to manage if you need to access the OpenWrt device.
+Once you configured the WAN go to firewall settings and add 2 rules to permit management access to your OpenWrt device.
+Usually we have http protocol (port 80 TCP) and ssh protocol (port 22 TCP).
+
+2. Hotspot NetWork
+
+Add at least one physical interface (Wireless or LAN) to the hotspot network, so that hotspot can use it.
+You can use either LAN interface or WIRELESS interface or both together.
+
+**Important**
+After having done it go to the specific interface settings and make sure the interface is only assigned to hotspot network (you need to unlink other networks, e.g. LAN from the physical interface).
+
+3. Wireless Security
+
+Go to Network-> Wireless -> Wireless Security and disable encription, hotspot tipically requires an open network without any authentication.
+
 
 ## First setup
 
