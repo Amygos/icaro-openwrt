@@ -32,9 +32,19 @@ Tested devices:
 	# opkg install libustream-mbedtls
 
 ```
-2. Add Icaro repository for your architecture (`opkg  print-architecture`):
+2. Add Icaro repository for your architecture:
+
+To find your architecture use `opkg print-architecture` command, e.g.:
+```
+root@GL-AR300M:~# opkg print-architecture
+arch all 1
+arch noarch 1
+arch mips_24kc 10
+```
+The architecture in this case is *mips_24kc*, replace it with every occurrence of the term *ARCH*
+
 ```shell
-	# echo "src/gz icaro  http://nethesis.github.io/icaro-openwrt_repo/<ARCH>/icaro" >> /etc/opkg/customfeeds.conf
+	# echo "src/gz icaro  http://nethesis.github.io/icaro-openwrt_repo/ARCH/icaro" >> /etc/opkg/customfeeds.conf
 ```
 3. Disable signature check commenting the line ``option check_signature 1`` in ``/etc/opkg.conf``
 
@@ -48,21 +58,17 @@ Tested devices:
 
 Add at least one physical interface to the hotspot network and make sure the is only assigned to hotspot network.
 
-## Configuration
+## First setup
 
-Available options:
+**Set up network configuration BEFORE this steps**
 
-- `disabled`: Enable/disable dedalo service (default true)
-- `network`: network for clients connected to Dedalo eg: `192.168.69.0/24`
-- `splash_page`: Wings (capitve portal) URL hosted on your Icaro installation, eg: ``http://icaro.mydomain.com/wings``
-- `aaa_url`:  Wax (Radius over HTTP) URL hosted on your Icaro installation, eg: ``https://icaro.mydomain.com/wax/aaa``
-- `api_url`: Sun APIs URL hosted on your Icaro installation, eg: ``https://icaro.mydomain.com/api``
-- `hotspot_id`:  the id of the Hotspot already present inside Icaro
-- `unit_name`: hostname of local installation, eg: ``hotelthesea.example.org``
-- `unit_description`: a descriptive name of local installation, eg: ``MyHotelAtTheSea``
-- `unit_uuid`:  a unique unit idenifier, usually a UUID, eg ``161fre6d-8578-4247-b4a2-c40dced94bdd``
-- `secret`: a shared secret between this unit and Icaro installation, eg: ``My$uperS3cret``
-
+1. Generate a UUID using:
+ ```shell
+	# uuidgen
+ ```
+ 
+ 
+2. Edit `/etc/config/dedalo` with your configurations settings
 
 Configuration example:
 
@@ -80,29 +86,35 @@ config dedalo
 	option secret 'My$uperS3cret'
 ```
 
-## First setup
+Available options:
 
-**Set up network configuration BEFORE this steps**
+- `disabled`: Enable/disable dedalo service (default true)
+- `network`: network for clients connected to Dedalo eg: `192.168.69.0/24`
+- `splash_page`: Wings (capitve portal) URL hosted on your Icaro installation, eg: ``http://icaro.mydomain.com/wings``
+- `aaa_url`:  Wax (Radius over HTTP) URL hosted on your Icaro installation, eg: ``https://icaro.mydomain.com/wax/aaa``
+- `api_url`: Sun APIs URL hosted on your Icaro installation, eg: ``https://icaro.mydomain.com/api``
+- `hotspot_id`:  the id of the Hotspot already present inside Icaro
+- `unit_name`: hostname of local installation, eg: ``hotelthesea.example.org``
+- `unit_description`: a descriptive name of local installation, eg: ``MyHotelAtTheSea``
+- `unit_uuid`:  a unique unit idenifier, usually a UUID, eg ``161fre6d-8578-4247-b4a2-c40dced94bdd``
+- `secret`: a shared secret between this unit and Icaro installation, eg: ``My$uperS3cret``
 
-1. Change `/etc/config/dedalo` with yours configurations setting, you can generate a UUID using:
- ```shell
-	# uuidgen
- ```
-2. Reload dedalo:
+ 
+3. Reload dedalo:
  ```shell
 	# /etc/init.d/dedalo reload
  ```
-3. Register dedalo unit:
+4. Register dedalo unit:
  ```shell
 	# dedalo register -u <your reseller username> -p <your reseller password>
  ```
-4. Restart dedalo:
+5. Restart dedalo:
  ```shell
 	# dedalo restart
  ```
-5. Some device need a physical restart for change to be apply correctly (some GL-iNet):
+6. Some device need a physical restart for change to be apply correctly (some GL-iNet):
  ```shell
-	# rebbot
+	# reboot
  ```
 
 ## Development
